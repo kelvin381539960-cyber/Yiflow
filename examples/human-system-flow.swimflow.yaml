@@ -1,0 +1,170 @@
+diagram:
+  id: human_system_flow
+  title: 系统与人工混合流程示例
+  description: 用于验证系统自动处理、第三方服务调用、人工复核和系统回写的混合流程。
+  direction: LR
+  version: 0.1.0
+  metadata:
+    category: human_system_mixed
+    author: Yiflow
+    status: example
+
+lanes:
+  - id: user
+    title: 用户
+  - id: frontend
+    title: 前端
+  - id: backend
+    title: 后端系统
+  - id: external_service
+    title: 外部服务
+  - id: operator
+    title: 人工运营
+
+nodes:
+  - id: start
+    type: start
+    text: 开始
+    lane: user
+
+  - id: user_submit
+    type: process
+    text: 用户提交请求
+    lane: user
+
+  - id: frontend_check
+    type: process
+    text: 前端基础校验
+    lane: frontend
+
+  - id: backend_create_case
+    type: process
+    text: 后端创建处理单
+    lane: backend
+
+  - id: call_external_service
+    type: external_ref
+    text: 调用外部服务
+    lane: external_service
+
+  - id: external_result_decision
+    type: decision
+    text: 外部服务是否通过
+    lane: backend
+
+  - id: auto_approve
+    type: process
+    text: 系统自动通过
+    lane: backend
+
+  - id: manual_review
+    type: process
+    text: 人工复核
+    lane: operator
+
+  - id: manual_decision
+    type: decision
+    text: 人工复核结果
+    lane: operator
+
+  - id: backend_update_status
+    type: process
+    text: 后端更新状态
+    lane: backend
+
+  - id: notify_user
+    type: process
+    text: 通知用户结果
+    lane: frontend
+
+  - id: success_end
+    type: end
+    text: 处理完成
+    lane: user
+
+  - id: reject_end
+    type: end
+    text: 处理失败
+    lane: user
+
+edges:
+  - id: e_start_submit
+    from: start
+    to: user_submit
+    path_type: main
+
+  - id: e_submit_frontend
+    from: user_submit
+    to: frontend_check
+    path_type: main
+
+  - id: e_frontend_backend
+    from: frontend_check
+    to: backend_create_case
+    path_type: main
+
+  - id: e_backend_external
+    from: backend_create_case
+    to: call_external_service
+    path_type: main
+
+  - id: e_external_result
+    from: call_external_service
+    to: external_result_decision
+    path_type: main
+
+  - id: e_result_pass
+    from: external_result_decision
+    to: auto_approve
+    label: 通过
+    path_type: main
+
+  - id: e_result_uncertain
+    from: external_result_decision
+    to: manual_review
+    label: 需人工判断
+    path_type: secondary
+
+  - id: e_result_fail
+    from: external_result_decision
+    to: reject_end
+    label: 拒绝
+    path_type: exception
+
+  - id: e_auto_update
+    from: auto_approve
+    to: backend_update_status
+    path_type: main
+
+  - id: e_manual_decision
+    from: manual_review
+    to: manual_decision
+    path_type: secondary
+
+  - id: e_manual_pass
+    from: manual_decision
+    to: backend_update_status
+    label: 通过
+    path_type: main
+
+  - id: e_manual_fail
+    from: manual_decision
+    to: reject_end
+    label: 拒绝
+    path_type: exception
+
+  - id: e_update_notify
+    from: backend_update_status
+    to: notify_user
+    path_type: main
+
+  - id: e_notify_success
+    from: notify_user
+    to: success_end
+    path_type: main
+
+layout:
+  lane_width_mode: auto
+  path_priority: main_first
+  branch_policy: main_plus_side_branch
+  external_node_policy: weak_layout
