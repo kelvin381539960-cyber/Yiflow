@@ -2,45 +2,52 @@
 
 ## Current Phase
 
-```text
-Phase 1：产品需求收敛
-```
+`Phase 1：产品需求收敛`
 
 ## Current Task
 
-```text
-YF-P1-001：输出 MVP Scope v1.0
-```
+`YF-P1-002：输出用户任务流文档`
 
 ## Completed Tasks
 
-- **YF-P0-001：创建 README**
-  - 输出文件：`README.md`
-  - 状态：Completed
-  - 说明：仓库根目录已具备项目入口、文档入口、当前阶段说明和 Agent 工作规则提示。
+### YF-P0-001：创建 README
 
-- **YF-P0-002：创建 AI 使用规则**
-  - 输出文件：`docs/ai-rules/yiflow-ai-rules-v1.0.md`
-  - 状态：Completed
-  - 说明：已定义 AI 角色边界、任务编号规则、代码生成规则、DSL/AST/Operation 变更规则、幻觉防控规则和输出自检清单。
+- 输出文件：`README.md`
+- 状态：Completed
+- 说明：仓库根目录已具备项目入口、文档入口、当前阶段说明和 Agent 工作规则提示。
 
-- **YF-P0-003：创建 ADR 模板**
-  - 输出文件：`docs/adr/adr-template.md`
-  - 状态：Completed
-  - 说明：已建立关键决策记录模板，后续 DSL、AST、Layout、Cursor 集成等关键变更必须通过 ADR 记录。
+### YF-P0-002：创建 AI 使用规则
 
-- **YF-P0-004：创建执行状态文件**
-  - 输出文件：`docs/project-plan/yiflow-execution-status.md`
-  - 状态：Completed
-  - 说明：本文件即为跨对话、跨 Agent 的当前执行状态入口。
+- 输出文件：`docs/ai-rules/yiflow-ai-rules-v1.0.md`
+- 状态：Completed
+- 说明：已定义 AI 角色边界、任务编号规则、代码生成规则、DSL/AST/Operation 变更规则、幻觉防控规则和输出自检清单。
 
-- **YF-P0-005：创建首批 examples**
-  - 输出文件：
-    - `examples/approval-flow.swimflow.yaml`
-    - `examples/human-system-flow.swimflow.yaml`
-    - `examples/exception-return-flow.swimflow.yaml`
-  - 状态：Completed
-  - 说明：已创建三类核心示例，分别覆盖标准审批、系统与人工混合、异常与回跳流程。未将 KYC 作为唯一示例场景。
+### YF-P0-003：创建 ADR 模板
+
+- 输出文件：`docs/adr/adr-template.md`
+- 状态：Completed
+- 说明：已建立关键决策记录模板，后续 DSL、AST、Layout、Cursor 集成等关键变更必须通过 ADR 记录。
+
+### YF-P0-004：创建执行状态文件
+
+- 输出文件：`docs/project-plan/yiflow-execution-status.md`
+- 状态：Completed
+- 说明：本文件即为跨对话、跨 Agent 的当前执行状态入口。
+
+### YF-P0-005：创建首批 examples
+
+- 输出文件：
+  - `examples/approval-flow.swimflow.yaml`
+  - `examples/human-system-flow.swimflow.yaml`
+  - `examples/exception-return-flow.swimflow.yaml`
+- 状态：Completed
+- 说明：已创建三类核心示例，分别覆盖标准审批、系统与人工混合、异常与回跳流程。未将 KYC 作为唯一示例场景。
+
+### YF-P1-001：输出 MVP Scope v1.0
+
+- 输出文件：`docs/prd/yiflow-mvp-scope-v1.0.md`
+- 状态：Completed
+- 说明：已明确 MVP 三阶段交付范围（P0 技术样机 / P1 可用原型 / P2 产品化），确认 MVP 必做功能集（SwimFlow DSL、Graph AST、Parser/Validator、基础布局、Markdown 预览、Editor 基础功能、CLI、SVG/PNG 导出），并明确排除项（自由画布、多人协作、完整 BPMN、AI 自然语言生成、draw.io 导入）。
 
 ## Changed Files
 
@@ -54,6 +61,7 @@ YF-P1-001：输出 MVP Scope v1.0
 - `examples/approval-flow.swimflow.yaml`
 - `examples/human-system-flow.swimflow.yaml`
 - `examples/exception-return-flow.swimflow.yaml`
+- `docs/prd/yiflow-mvp-scope-v1.0.md`
 
 ## Current Decisions
 
@@ -85,37 +93,32 @@ YF-P1-001：输出 MVP Scope v1.0
 
 按实施计划继续执行：
 
-1. **YF-P1-001：输出 MVP Scope v1.0**
-   - `docs/prd/yiflow-mvp-scope-v1.0.md`
+### YF-P1-002：输出用户任务流文档
 
-2. **YF-P1-002：输出用户任务流文档**
-   - `docs/ux/yiflow-user-flows-v1.0.md`
+- `docs/ux/yiflow-user-flows-v1.0.md`
 
-3. **YF-P1-003：输出编辑器交互规格**
-   - `docs/ux/yiflow-editor-interaction-spec-v1.0.md`
+### YF-P1-003：输出编辑器交互规格
+
+- `docs/ux/yiflow-editor-interaction-spec-v1.0.md`
 
 ## Agent Handoff Notes
 
 新 Agent 接手时，请先阅读：
 
-```text
-1. docs/project-plan/yiflow-implementation-plan-v1.0.md
-2. docs/project-plan/yiflow-project-plan-v1.0.md
-3. docs/prd/yiflow-prd-v1.3.md
-4. docs/project-plan/yiflow-execution-status.md
+1. `docs/project-plan/yiflow-implementation-plan-v1.0.md`
+2. `docs/project-plan/yiflow-project-plan-v1.0.md`
+3. `docs/prd/yiflow-prd-v1.3.md`
+4. `docs/project-plan/yiflow-execution-status.md`
 5. 当前任务相关文档
-```
 
 接手后必须先输出：
 
-```text
-我已接手 Yiflow 项目。
-当前阶段：Phase 1
-当前任务：YF-P1-001 输出 MVP Scope v1.0
-已知约束：不直接写核心代码；不改 DSL/AST/Operation 核心设计；关键决策必须写 ADR
-下一步动作：创建 docs/prd/yiflow-mvp-scope-v1.0.md
-不会做的事：不会跳过产品需求收敛直接进入 P0 代码实现
-```
+> 我已接手 Yiflow 项目。
+> 当前阶段：Phase 1
+> 当前任务：YF-P1-002 输出用户任务流文档
+> 已知约束：不直接写核心代码；不改 DSL/AST/Operation 核心设计；关键决策必须写 ADR
+> 下一步动作：创建 docs/ux/yiflow-user-flows-v1.0.md
+> 不会做的事：不会跳过产品需求收敛直接进入 P0 代码实现
 
 ## Do Not Do
 
