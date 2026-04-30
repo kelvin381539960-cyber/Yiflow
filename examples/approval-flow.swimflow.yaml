@@ -1,0 +1,140 @@
+diagram:
+  id: approval_flow_basic
+  title: 标准审批流程示例
+  description: 用于验证普通审批流程中的泳道、主路径、人工审核和通过/拒绝分支。
+  direction: LR
+  version: 0.1.0
+  metadata:
+    category: approval
+    author: Yiflow
+    status: example
+
+lanes:
+  - id: applicant
+    title: 申请人
+  - id: system
+    title: 系统
+  - id: reviewer
+    title: 审核人
+  - id: manager
+    title: 主管
+
+nodes:
+  - id: start
+    type: start
+    text: 开始
+    lane: applicant
+
+  - id: submit_request
+    type: process
+    text: 提交申请
+    lane: applicant
+
+  - id: validate_request
+    type: process
+    text: 系统校验申请信息
+    lane: system
+
+  - id: info_complete
+    type: decision
+    text: 信息是否完整
+    lane: system
+
+  - id: review_request
+    type: process
+    text: 人工审核
+    lane: reviewer
+
+  - id: need_manager_approval
+    type: decision
+    text: 是否需要主管审批
+    lane: reviewer
+
+  - id: manager_approval
+    type: process
+    text: 主管审批
+    lane: manager
+
+  - id: approve
+    type: end
+    text: 审批通过
+    lane: system
+
+  - id: reject
+    type: end
+    text: 审批拒绝
+    lane: system
+
+  - id: request_more_info
+    type: process
+    text: 要求补充信息
+    lane: applicant
+
+edges:
+  - id: e_start_submit
+    from: start
+    to: submit_request
+    path_type: main
+
+  - id: e_submit_validate
+    from: submit_request
+    to: validate_request
+    path_type: main
+
+  - id: e_validate_complete
+    from: validate_request
+    to: info_complete
+    path_type: main
+
+  - id: e_complete_yes
+    from: info_complete
+    to: review_request
+    label: 完整
+    path_type: main
+
+  - id: e_complete_no
+    from: info_complete
+    to: request_more_info
+    label: 不完整
+    path_type: exception
+
+  - id: e_more_info_submit
+    from: request_more_info
+    to: submit_request
+    label: 补充后重新提交
+    path_type: return
+
+  - id: e_review_manager_decision
+    from: review_request
+    to: need_manager_approval
+    path_type: main
+
+  - id: e_need_manager_yes
+    from: need_manager_approval
+    to: manager_approval
+    label: 需要
+    path_type: secondary
+
+  - id: e_need_manager_no
+    from: need_manager_approval
+    to: approve
+    label: 不需要
+    path_type: main
+
+  - id: e_manager_approve
+    from: manager_approval
+    to: approve
+    label: 通过
+    path_type: main
+
+  - id: e_manager_reject
+    from: manager_approval
+    to: reject
+    label: 拒绝
+    path_type: exception
+
+layout:
+  lane_width_mode: auto
+  path_priority: main_first
+  branch_policy: main_plus_side_branch
+  return_path_channel: bottom
