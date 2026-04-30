@@ -1,0 +1,179 @@
+diagram:
+  id: exception_return_flow
+  title: 异常与回跳流程示例
+  description: 用于验证异常分支、补件回跳、重新提交和主路径锁定能力。
+  direction: LR
+  version: 0.1.0
+  metadata:
+    category: exception_return
+    author: Yiflow
+    status: example
+
+lanes:
+  - id: requester
+    title: 发起人
+  - id: system
+    title: 系统
+  - id: reviewer
+    title: 审核人
+  - id: risk
+    title: 风控
+
+nodes:
+  - id: start
+    type: start
+    text: 开始
+    lane: requester
+
+  - id: submit_case
+    type: process
+    text: 提交流程单
+    lane: requester
+
+  - id: system_validate
+    type: process
+    text: 系统校验
+    lane: system
+
+  - id: validate_result
+    type: decision
+    text: 校验结果
+    lane: system
+
+  - id: request_supplement
+    type: process
+    text: 要求补件
+    lane: requester
+
+  - id: resubmit_case
+    type: process
+    text: 重新提交
+    lane: requester
+
+  - id: reviewer_check
+    type: process
+    text: 审核人检查
+    lane: reviewer
+
+  - id: reviewer_result
+    type: decision
+    text: 审核结果
+    lane: reviewer
+
+  - id: risk_review
+    type: process
+    text: 风控复核
+    lane: risk
+
+  - id: risk_result
+    type: decision
+    text: 风控结果
+    lane: risk
+
+  - id: pass_end
+    type: end
+    text: 流程通过
+    lane: system
+
+  - id: reject_end
+    type: end
+    text: 流程拒绝
+    lane: system
+
+  - id: close_end
+    type: end
+    text: 超时关闭
+    lane: system
+
+edges:
+  - id: e_start_submit
+    from: start
+    to: submit_case
+    path_type: main
+
+  - id: e_submit_validate
+    from: submit_case
+    to: system_validate
+    path_type: main
+
+  - id: e_validate_result
+    from: system_validate
+    to: validate_result
+    path_type: main
+
+  - id: e_validate_pass
+    from: validate_result
+    to: reviewer_check
+    label: 通过
+    path_type: main
+
+  - id: e_validate_missing
+    from: validate_result
+    to: request_supplement
+    label: 缺资料
+    path_type: exception
+
+  - id: e_supplement_resubmit
+    from: request_supplement
+    to: resubmit_case
+    path_type: exception
+
+  - id: e_resubmit_validate
+    from: resubmit_case
+    to: system_validate
+    label: 回到系统校验
+    path_type: return
+
+  - id: e_validate_timeout
+    from: request_supplement
+    to: close_end
+    label: 超时未补
+    path_type: exception
+
+  - id: e_reviewer_result
+    from: reviewer_check
+    to: reviewer_result
+    path_type: main
+
+  - id: e_reviewer_pass
+    from: reviewer_result
+    to: pass_end
+    label: 通过
+    path_type: main
+
+  - id: e_reviewer_risk
+    from: reviewer_result
+    to: risk_review
+    label: 命中风险
+    path_type: secondary
+
+  - id: e_reviewer_reject
+    from: reviewer_result
+    to: reject_end
+    label: 拒绝
+    path_type: exception
+
+  - id: e_risk_result
+    from: risk_review
+    to: risk_result
+    path_type: secondary
+
+  - id: e_risk_pass
+    from: risk_result
+    to: pass_end
+    label: 通过
+    path_type: main
+
+  - id: e_risk_reject
+    from: risk_result
+    to: reject_end
+    label: 拒绝
+    path_type: exception
+
+layout:
+  lane_width_mode: auto
+  path_priority: main_first
+  branch_policy: main_plus_side_branch
+  return_path_channel: bottom
+  lock:
+    main_path: true
