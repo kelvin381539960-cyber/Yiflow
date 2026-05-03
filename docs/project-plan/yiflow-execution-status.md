@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P3-003：实现 Validator v0.1`
+`YF-P3-004：实现 Layout v0.1`
 
 ## Completed Tasks
 
@@ -129,6 +129,15 @@
 - 状态：Completed
 - 说明：已实现 YAML → Graph AST 解析，支持读取 `.swimflow.yaml`、转换 diagram/lanes/nodes/edges/layout 到 AST，并在缺少必填字段或 enum 非法时返回结构化错误。已添加 parser 测试覆盖 3 个 examples 和错误场景。
 
+### YF-P3-003：实现 Validator v0.1
+
+- 输出文件：
+  - `packages/validator/src/index.ts`
+  - `tests/smoke.test.ts`
+  - `tests/validator.test.ts`
+- 状态：Completed
+- 说明：已实现 Graph AST 结构校验，覆盖 lane/node/edge id 唯一性、node.lane 引用、edge from/to 引用、decision 出边数量、start/end 边方向 warning。已添加 validator 测试覆盖 3 个 examples 和 duplicate/reference/decision 错误场景。
+
 ## Changed Files
 
 - `README.md`
@@ -167,6 +176,7 @@
 - `packages/cli/src/index.ts`
 - `tests/smoke.test.ts`
 - `tests/parser.test.ts`
+- `tests/validator.test.ts`
 
 ## Current Decisions
 
@@ -190,25 +200,18 @@
 
 - 是否需要额外加入 KYC 示例作为补充样例。
 - P0 是否需要在 Parser / Validator 完成后加入 GitHub Actions。
-- CLI 是否在 Validator 完成后接入真实 validate 流程。
+- CLI 是否在 Layout / Renderer 完成后统一接入真实 validate/render 流程。
 
 ## Risks
 
 - Phase 3 必须继续小步提交，避免一次性生成完整系统。
 - 当前代码通过 GitHub 写入，但尚未在本地实际执行 `npm install`、`npm test` 或 CLI 命令验证。
-- Validator、layout、renderer 仍为占位入口，不代表对应能力已实现。
-- Parser 当前只做结构解析和基础字段/enum 检查，引用合法性、唯一性、decision 出边等应由 Validator v0.1 实现。
+- Layout、renderer 仍为占位入口，不代表对应能力已实现。
+- Validator 当前只做结构校验，不负责布局可读性或 SVG 输出校验。
 
 ## Next Tasks
 
 按实施计划继续执行：
-
-### YF-P3-003：实现 Validator v0.1
-
-- 能校验节点唯一。
-- 能校验 edge 引用。
-- 能校验 lane 引用。
-- 能校验 decision 出边。
 
 ### YF-P3-004：实现 Layout v0.1
 
@@ -221,6 +224,11 @@
 - 能输出 SVG。
 - 能显示泳道、节点、连线。
 - 能在浏览器打开查看。
+
+### YF-P3-006：接入 CLI validate/render 最小闭环
+
+- `yiflow validate examples/approval-flow.swimflow.yaml`
+- `yiflow render examples/approval-flow.swimflow.yaml -o output.svg`
 
 ## Agent Handoff Notes
 
@@ -236,10 +244,10 @@
 
 > 我已接手 Yiflow 项目。  
 > 当前阶段：Phase 3  
-> 当前任务：YF-P3-003 实现 Validator v0.1  
-> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；Validator 只做结构校验，不实现 Layout/Renderer 业务逻辑  
-> 下一步动作：实现 Validator v0.1，校验节点唯一、edge 引用、lane 引用、decision 出边  
-> 不会做的事：不会直接一次性实现 Layout、Renderer、CLI 全套系统
+> 当前任务：YF-P3-004 实现 Layout v0.1  
+> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；Layout 只做基础坐标计算，不实现 SVG Renderer 业务逻辑  
+> 下一步动作：实现 Layout v0.1，按泳道和主路径 rank 输出节点坐标  
+> 不会做的事：不会直接一次性实现 Renderer、CLI 全套系统
 
 ## Do Not Do
 
