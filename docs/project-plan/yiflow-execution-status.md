@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-`Phase 3：P0 技术样机（待项目主控确认后开始）`
+`Phase 3：P0 技术样机`
 
 ## Current Task
 
@@ -91,6 +91,12 @@
 - 状态：Completed
 - 说明：已定义 validate、render、inspect、apply-op、version、help 命令，明确 exit code、错误输出规范、文件写入规则和 P0 最小闭环。
 
+### ADR-0001：P0 技术栈与布局策略
+
+- 输出文件：`docs/adr/adr-0001-p0-tech-stack-and-layout-strategy.md`
+- 状态：Accepted
+- 说明：已确认 P0 采用 TypeScript、自研简单布局、SVG only 输出。
+
 ## Changed Files
 
 - `README.md`
@@ -99,6 +105,7 @@
 - `docs/prd/yiflow-prd-v1.3.md`
 - `docs/ai-rules/yiflow-ai-rules-v1.0.md`
 - `docs/adr/adr-template.md`
+- `docs/adr/adr-0001-p0-tech-stack-and-layout-strategy.md`
 - `docs/project-plan/yiflow-execution-status.md`
 - `examples/approval-flow.swimflow.yaml`
 - `examples/human-system-flow.swimflow.yaml`
@@ -117,35 +124,31 @@
 - Yiflow 已完成 Phase 0 的核心治理体系建设。
 - Yiflow 已完成 Phase 1 的产品需求收敛。
 - Yiflow 已完成 Phase 2 的核心技术设计文档。
+- Yiflow 当前进入 Phase 3：P0 技术样机。
 - 后续所有正式工作必须有任务编号。
 - AI 不能越级修改产品边界、DSL、AST、Operation、Layout 或 Cursor 集成路线。
 - 关键决策必须写 ADR。
 - 默认执行顺序遵循 `docs/project-plan/yiflow-implementation-plan-v1.0.md`。
 - 新 Agent 接手时必须先读实施计划、项目计划、PRD 和本执行状态文件。
-- examples 必须覆盖多类真实业务流程，不把 KYC 作为唯一目标场景。
-- MVP 用户任务流已收敛为 5 条：首次出图、小改节点、改职责归属、局部整理、导出进文档。
-- 编辑器是结构化编辑器，不是 Figma / draw.io 式自由画布。
 - DSL v0.1 采用 YAML-first，当前 schema 必须兼容现有 3 个 examples。
 - Graph AST 是 Yiflow 内部结构真相，Renderer 不直接读取 DSL，Editor 不直接修改 SVG。
 - Operation 默认作用于 Graph AST，不直接改 SVG。
 - Layout v0.1 以主路径可读性为第一优先级。
 - CLI v0.1 以 validate / render 最小闭环为核心。
+- ADR-0001 已确认：P0 技术栈为 TypeScript；P0 Layout 采用自研简单布局；P0 Render 只支持 SVG。
 
 ## Open Questions
 
 - 是否需要额外加入 KYC 示例作为补充样例。
-- P0 技术栈是否采用 TypeScript 作为默认实现语言。
-- Layout P0 是否先做自研简单布局，还是直接引入 dagre / elkjs 进行验证。
-- P0 是否只支持 SVG 输出，HTML Preview 延后到 P1。
-- 是否需要在进入 Phase 3 前创建 ADR-0001 固化技术栈与布局策略。
+- Phase 3 初始化工程结构时，包管理方式采用 npm workspace 还是单 package 起步。
+- P0 是否需要在首轮就加入 GitHub Actions，还是等 Parser / Validator 后再加入。
 
 ## Risks
 
-- 若直接进入代码开发但未确认技术栈，可能导致后续重构。
-- 若 Layout P0 选型过重，可能拖慢技术样机。
-- 若 Layout P0 选型过轻，可能无法验证异常路径和回跳路径。
-- 当前 examples 尚未经过真实 parser / validator 校验，因为代码尚未实现。
 - Phase 3 开始后必须小步提交，避免一次性生成完整系统。
+- 若工程结构过早复杂化，会增加维护成本。
+- 若 P0 layout 实现过度追求美观，会拖慢最小闭环。
+- 当前 examples 尚未经过真实 parser / validator 校验，因为代码尚未实现。
 
 ## Next Tasks
 
@@ -197,10 +200,10 @@ tests
 接手后必须先输出：
 
 > 我已接手 Yiflow 项目。  
-> 当前阶段：Phase 3（待项目主控确认后开始）  
+> 当前阶段：Phase 3  
 > 当前任务：YF-P3-001 初始化工程结构  
-> 已知约束：小步提交；不一次性实现完整系统；不改变 DSL/AST/Operation 核心结构；关键变更必须写 ADR  
-> 下一步动作：确认技术栈与 P0 layout 策略后，初始化工程结构  
+> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；不改变 DSL/AST/Operation 核心结构；关键变更必须写 ADR  
+> 下一步动作：初始化工程结构，建立可安装、可测试、可执行基础 CLI 入口  
 > 不会做的事：不会直接一次性实现 Parser、Validator、Layout、Renderer、CLI 全套系统
 
 ## Do Not Do
