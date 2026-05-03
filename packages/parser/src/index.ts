@@ -18,6 +18,12 @@ type UnknownRecord = Record<string, unknown>;
 
 const NODE_TYPES: ReadonlySet<string> = new Set(['start', 'end', 'process', 'decision', 'external_ref']);
 const PATH_TYPES: ReadonlySet<string> = new Set(['main', 'secondary', 'exception', 'return']);
+const DIRECTION_VALUES: ReadonlySet<string> = new Set(['LR']);
+const LANE_WIDTH_MODE_VALUES: ReadonlySet<string> = new Set(['auto']);
+const PATH_PRIORITY_VALUES: ReadonlySet<string> = new Set(['main_first']);
+const BRANCH_POLICY_VALUES: ReadonlySet<string> = new Set(['main_plus_side_branch']);
+const RETURN_PATH_CHANNEL_VALUES: ReadonlySet<string> = new Set(['bottom']);
+const EXTERNAL_NODE_POLICY_VALUES: ReadonlySet<string> = new Set(['weak_layout']);
 
 export async function parseSwimflowFile(filePath: string): Promise<ParseResult> {
   try {
@@ -189,11 +195,11 @@ function parseLayoutConfig(layout: UnknownRecord, errors: ParseIssue[]): LayoutC
   const lock = getOptionalRecord(layout, 'lock', errors, 'layout.lock');
 
   return {
-    laneWidthMode: getOptionalEnum(layout, 'lane_width_mode', new Set(['auto']), errors, 'layout.lane_width_mode'),
-    pathPriority: getOptionalEnum(layout, 'path_priority', new Set(['main_first']), errors, 'layout.path_priority'),
-    branchPolicy: getOptionalEnum(layout, 'branch_policy', new Set(['main_plus_side_branch']), errors, 'layout.branch_policy'),
-    returnPathChannel: getOptionalEnum(layout, 'return_path_channel', new Set(['bottom']), errors, 'layout.return_path_channel'),
-    externalNodePolicy: getOptionalEnum(layout, 'external_node_policy', new Set(['weak_layout']), errors, 'layout.external_node_policy'),
+    laneWidthMode: getOptionalEnum<'auto'>(layout, 'lane_width_mode', LANE_WIDTH_MODE_VALUES, errors, 'layout.lane_width_mode'),
+    pathPriority: getOptionalEnum<'main_first'>(layout, 'path_priority', PATH_PRIORITY_VALUES, errors, 'layout.path_priority'),
+    branchPolicy: getOptionalEnum<'main_plus_side_branch'>(layout, 'branch_policy', BRANCH_POLICY_VALUES, errors, 'layout.branch_policy'),
+    returnPathChannel: getOptionalEnum<'bottom'>(layout, 'return_path_channel', RETURN_PATH_CHANNEL_VALUES, errors, 'layout.return_path_channel'),
+    externalNodePolicy: getOptionalEnum<'weak_layout'>(layout, 'external_node_policy', EXTERNAL_NODE_POLICY_VALUES, errors, 'layout.external_node_policy'),
     lock: lock
       ? {
           mainPath: getOptionalBoolean(lock, 'main_path', errors, 'layout.lock.main_path')
@@ -345,7 +351,7 @@ function getOptionalEnum<T extends string>(
 }
 
 function getOptionalDirection(diagram: UnknownRecord, errors: ParseIssue[]): Direction {
-  const direction = getOptionalEnum<Direction>(diagram, 'direction', new Set(['LR']), errors, 'diagram.direction');
+  const direction = getOptionalEnum<Direction>(diagram, 'direction', DIRECTION_VALUES, errors, 'diagram.direction');
   return direction ?? 'LR';
 }
 
