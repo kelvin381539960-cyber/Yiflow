@@ -2,11 +2,11 @@
 
 ## Current Phase
 
-`Phase 1：产品需求收敛`
+`Phase 2：技术设计与验证`
 
 ## Current Task
 
-`YF-P1-003：输出编辑器交互规格`
+`YF-P2-001：DSL Schema v0.1`
 
 ## Completed Tasks
 
@@ -55,6 +55,12 @@
 - 状态：Completed
 - 说明：已覆盖首次出图、小改节点、改职责归属、局部整理、导出进文档 5 条 MVP 用户任务流；每条任务流均包含用户输入、系统动作、成功状态、失败状态和不做范围。
 
+### YF-P1-003：输出编辑器交互规格
+
+- 输出文件：`docs/ux/yiflow-editor-interaction-spec-v1.0.md`
+- 状态：Completed
+- 说明：已明确节点菜单、边菜单、合法拖拽、局部整理、锁定机制、保存回写 DSL、Markdown Preview 与 Editor 边界，并明确禁止自由画布模式。
+
 ## Changed Files
 
 - `README.md`
@@ -69,10 +75,12 @@
 - `examples/exception-return-flow.swimflow.yaml`
 - `docs/prd/yiflow-mvp-scope-v1.0.md`
 - `docs/ux/yiflow-user-flows-v1.0.md`
+- `docs/ux/yiflow-editor-interaction-spec-v1.0.md`
 
 ## Current Decisions
 
-- Yiflow 已完成 Phase 0 的核心治理体系建设，当前处于 Phase 1 产品需求收敛。
+- Yiflow 已完成 Phase 0 的核心治理体系建设。
+- Yiflow 已完成 Phase 1 的产品需求收敛，可以进入 Phase 2 技术设计与验证。
 - 后续所有正式工作必须有任务编号。
 - AI 不能越级修改产品边界、DSL、AST、Operation、Layout 或 Cursor 集成路线。
 - 关键决策必须写 ADR。
@@ -80,6 +88,7 @@
 - 新 Agent 接手时必须先读实施计划、项目计划、PRD 和本执行状态文件。
 - examples 必须覆盖多类真实业务流程，不把 KYC 作为唯一目标场景。
 - MVP 用户任务流已收敛为 5 条：首次出图、小改节点、改职责归属、局部整理、导出进文档。
+- 编辑器是结构化编辑器，不是 Figma / draw.io 式自由画布。
 
 ## Open Questions
 
@@ -87,25 +96,31 @@
 - DSL Schema v0.1 是否采用 YAML 作为唯一 MVP 输入格式。
 - P0 技术栈是否采用 TypeScript 作为默认实现语言。
 - Layout P0 是否先做自研简单布局，还是直接引入 dagre / elkjs 进行验证。
-- 编辑器交互规格需要继续明确节点菜单、边菜单、合法拖拽、局部整理、锁定、保存回写。
-
-这些问题当前不阻塞 Phase 1。
+- DSL Schema v0.1 需要在不破坏现有 examples 的前提下明确 `diagram`、`lanes`、`nodes`、`edges`、`path_type`、`layout`、`metadata`。
 
 ## Risks
 
-- 若 Phase 1 不收敛 MVP 范围，后续技术设计会过宽。
 - 若直接进入代码开发，会绕过 DSL Schema、AST Model 和技术设计。
 - 若 AI 未严格遵守 `docs/ai-rules/yiflow-ai-rules-v1.0.md`，可能导致范围膨胀和不可维护代码。
 - 当前 examples 尚未经过 schema 校验，因为 DSL Schema v0.1 尚未正式定义。
-- 若编辑器交互规格没有边界，Yiflow 可能滑向自由画布工具。
+- 若 DSL Schema 定义过宽，后续 Parser、Validator 和 Editor 实现成本会升高。
+- 若 DSL Schema 定义过窄，后续 Operation 和 Layout 可能缺少必要字段。
 
 ## Next Tasks
 
 按实施计划继续执行：
 
-### YF-P1-003：输出编辑器交互规格
+### YF-P2-001：DSL Schema v0.1
 
-- `docs/ux/yiflow-editor-interaction-spec-v1.0.md`
+- `docs/tech-design/yiflow-dsl-schema-v0.1.md`
+
+### YF-P2-002：AST Model v0.1
+
+- `docs/tech-design/yiflow-ast-model-v0.1.md`
+
+### YF-P2-003：Operation Protocol v0.1
+
+- `docs/tech-design/yiflow-operation-protocol-v0.1.md`
 
 ## Agent Handoff Notes
 
@@ -120,11 +135,11 @@
 接手后必须先输出：
 
 > 我已接手 Yiflow 项目。  
-> 当前阶段：Phase 1  
-> 当前任务：YF-P1-003 输出编辑器交互规格  
-> 已知约束：不直接写核心代码；不改 DSL/AST/Operation 核心设计；关键决策必须写 ADR；不把编辑器做成自由画布  
-> 下一步动作：创建 docs/ux/yiflow-editor-interaction-spec-v1.0.md  
-> 不会做的事：不会跳过产品需求收敛直接进入 P0 代码实现
+> 当前阶段：Phase 2  
+> 当前任务：YF-P2-001 DSL Schema v0.1  
+> 已知约束：不直接写核心代码；不实现 Parser；不改产品边界；关键决策必须写 ADR；Schema 必须兼容现有 examples  
+> 下一步动作：创建 docs/tech-design/yiflow-dsl-schema-v0.1.md  
+> 不会做的事：不会跳过技术设计直接进入 P0 代码实现
 
 ## Do Not Do
 
@@ -135,3 +150,4 @@
 - 不要将 KYC 作为唯一示例场景。
 - 不要未经 ADR 修改 DSL / AST / Operation 核心结构。
 - 不要把编辑器设计成 Figma / draw.io 式自由画布。
+- 不要在 DSL Schema 未完成前实现 Parser。
