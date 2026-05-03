@@ -6,6 +6,7 @@
   "types": "../../dist/packages/parser/src/index.d.ts",
   "private": true,
   "dependencies": {
-    "@yiflow/core": "0.1.0"
+    "@yiflow/core": "0.1.0",
+    "yaml": "^2.7.1"
   }
 }
