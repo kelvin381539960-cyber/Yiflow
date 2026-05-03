@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P3-002：实现 Parser v0.1`
+`YF-P3-003：实现 Validator v0.1`
 
 ## Completed Tasks
 
@@ -117,7 +117,17 @@
   - `packages/cli/src/index.ts`
   - `tests/smoke.test.ts`
 - 状态：Completed
-- 说明：已建立 TypeScript + npm workspace 工程骨架，创建 core/parser/validator/layout/renderer/cli 六个包、基础 CLI 占位入口和 smoke test。当前仅为骨架，占位实现不代表 Parser/Validator/Layout/Renderer 已完成。
+- 说明：已建立 TypeScript + npm workspace 工程骨架，创建 core/parser/validator/layout/renderer/cli 六个包、基础 CLI 占位入口和 smoke test。
+
+### YF-P3-002：实现 Parser v0.1
+
+- 输出文件：
+  - `packages/parser/package.json`
+  - `packages/core/src/index.ts`
+  - `packages/parser/src/index.ts`
+  - `tests/parser.test.ts`
+- 状态：Completed
+- 说明：已实现 YAML → Graph AST 解析，支持读取 `.swimflow.yaml`、转换 diagram/lanes/nodes/edges/layout 到 AST，并在缺少必填字段或 enum 非法时返回结构化错误。已添加 parser 测试覆盖 3 个 examples 和错误场景。
 
 ## Changed Files
 
@@ -156,6 +166,7 @@
 - `packages/cli/package.json`
 - `packages/cli/src/index.ts`
 - `tests/smoke.test.ts`
+- `tests/parser.test.ts`
 
 ## Current Decisions
 
@@ -166,8 +177,6 @@
 - 后续所有正式工作必须有任务编号。
 - AI 不能越级修改产品边界、DSL、AST、Operation、Layout 或 Cursor 集成路线。
 - 关键决策必须写 ADR。
-- 默认执行顺序遵循 `docs/project-plan/yiflow-implementation-plan-v1.0.md`。
-- 新 Agent 接手时必须先读实施计划、项目计划、PRD 和本执行状态文件。
 - DSL v0.1 采用 YAML-first，当前 schema 必须兼容现有 3 个 examples。
 - Graph AST 是 Yiflow 内部结构真相，Renderer 不直接读取 DSL，Editor 不直接修改 SVG。
 - Operation 默认作用于 Graph AST，不直接改 SVG。
@@ -175,29 +184,24 @@
 - CLI v0.1 以 validate / render 最小闭环为核心。
 - ADR-0001 已确认：P0 技术栈为 TypeScript；P0 Layout 采用自研简单布局；P0 Render 只支持 SVG。
 - Phase 3 工程结构采用 npm workspace 起步。
+- Parser v0.1 引入最小依赖 `yaml`。
 
 ## Open Questions
 
 - 是否需要额外加入 KYC 示例作为补充样例。
 - P0 是否需要在 Parser / Validator 完成后加入 GitHub Actions。
-- 是否需要在 YF-P3-002 中引入 YAML 解析依赖；如引入，应保持最小依赖。
+- CLI 是否在 Validator 完成后接入真实 validate 流程。
 
 ## Risks
 
 - Phase 3 必须继续小步提交，避免一次性生成完整系统。
-- 当前工程骨架通过 GitHub 写入，但尚未在本地实际执行 `npm install`、`npm test` 或 CLI 命令验证。
-- 当前 parser、validator、layout、renderer 均为占位入口，不代表对应能力已实现。
-- 当前 examples 尚未经过真实 parser / validator 校验，因为 Parser v0.1 尚未实现。
+- 当前代码通过 GitHub 写入，但尚未在本地实际执行 `npm install`、`npm test` 或 CLI 命令验证。
+- Validator、layout、renderer 仍为占位入口，不代表对应能力已实现。
+- Parser 当前只做结构解析和基础字段/enum 检查，引用合法性、唯一性、decision 出边等应由 Validator v0.1 实现。
 
 ## Next Tasks
 
 按实施计划继续执行：
-
-### YF-P3-002：实现 Parser v0.1
-
-- 能读取 YAML。
-- 能转换为 AST。
-- 遇到缺字段能报错。
 
 ### YF-P3-003：实现 Validator v0.1
 
@@ -211,6 +215,12 @@
 - 能按泳道排列节点。
 - 能让主路径从左到右。
 - 能输出节点坐标。
+
+### YF-P3-005：实现 SVG Renderer v0.1
+
+- 能输出 SVG。
+- 能显示泳道、节点、连线。
+- 能在浏览器打开查看。
 
 ## Agent Handoff Notes
 
@@ -226,10 +236,10 @@
 
 > 我已接手 Yiflow 项目。  
 > 当前阶段：Phase 3  
-> 当前任务：YF-P3-002 实现 Parser v0.1  
-> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；Parser 只做 YAML → AST；不实现 Validator/Layout/Renderer 业务逻辑  
-> 下一步动作：实现 Parser v0.1，使 examples 可读取并转换为 Graph AST  
-> 不会做的事：不会直接一次性实现 Validator、Layout、Renderer、CLI 全套系统
+> 当前任务：YF-P3-003 实现 Validator v0.1  
+> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；Validator 只做结构校验，不实现 Layout/Renderer 业务逻辑  
+> 下一步动作：实现 Validator v0.1，校验节点唯一、edge 引用、lane 引用、decision 出边  
+> 不会做的事：不会直接一次性实现 Layout、Renderer、CLI 全套系统
 
 ## Do Not Do
 
