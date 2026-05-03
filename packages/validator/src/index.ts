@@ -19,6 +19,8 @@ export function validateGraph(graph: Graph): ValidationResult {
   const errors: ValidationIssue[] = [];
   const warnings: ValidationIssue[] = [];
 
+  validateGraphMinimumStructure(graph, errors);
+
   const laneIds = collectDuplicateIds(graph.lanes, 'lane', errors);
   const nodeIds = collectDuplicateIds(graph.nodes, 'node', errors);
   collectDuplicateIds(graph.edges, 'edge', errors);
@@ -37,6 +39,44 @@ export function validateGraph(graph: Graph): ValidationResult {
 
 export function validateGraphPlaceholder(graph: Graph): ValidationResult {
   return validateGraph(graph);
+}
+
+function validateGraphMinimumStructure(graph: Graph, errors: ValidationIssue[]): void {
+  if (graph.lanes.length === 0) {
+    errors.push({
+      code: 'LANE_REQUIRED',
+      message: 'Graph must contain at least 1 lane.',
+      target: 'graph:lanes',
+      level: 'error'
+    });
+  }
+
+  if (graph.nodes.length === 0) {
+    errors.push({
+      code: 'NODE_REQUIRED',
+      message: 'Graph must contain at least 1 node.',
+      target: 'graph:nodes',
+      level: 'error'
+    });
+  }
+
+  if (!graph.nodes.some((node) => node.type === 'start')) {
+    errors.push({
+      code: 'START_NODE_REQUIRED',
+      message: 'Graph must contain at least 1 start node.',
+      target: 'graph:nodes',
+      level: 'error'
+    });
+  }
+
+  if (!graph.nodes.some((node) => node.type === 'end')) {
+    errors.push({
+      code: 'END_NODE_REQUIRED',
+      message: 'Graph must contain at least 1 end node.',
+      target: 'graph:nodes',
+      level: 'error'
+    });
+  }
 }
 
 function collectDuplicateIds<T extends Lane | FlowNode | FlowEdge>(items: T[], kind: 'lane' | 'node' | 'edge', errors: ValidationIssue[]): Set<string> {
