@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P2-001：DSL Schema v0.1`
+`YF-P2-002：AST Model v0.1`
 
 ## Completed Tasks
 
@@ -61,6 +61,12 @@
 - 状态：Completed
 - 说明：已明确节点菜单、边菜单、合法拖拽、局部整理、锁定机制、保存回写 DSL、Markdown Preview 与 Editor 边界，并明确禁止自由画布模式。
 
+### YF-P2-001：DSL Schema v0.1
+
+- 输出文件：`docs/tech-design/yiflow-dsl-schema-v0.1.md`
+- 状态：Completed
+- 说明：已定义 `diagram`、`lanes`、`nodes`、`edges`、`path_type`、`layout`、`metadata` 和基础校验规则；确认兼容现有 examples；明确 v0.1 不包含 BPMN 完整语义、自由画布坐标、AI prompt 历史和运行时执行状态。
+
 ## Changed Files
 
 - `README.md`
@@ -76,11 +82,13 @@
 - `docs/prd/yiflow-mvp-scope-v1.0.md`
 - `docs/ux/yiflow-user-flows-v1.0.md`
 - `docs/ux/yiflow-editor-interaction-spec-v1.0.md`
+- `docs/tech-design/yiflow-dsl-schema-v0.1.md`
 
 ## Current Decisions
 
 - Yiflow 已完成 Phase 0 的核心治理体系建设。
-- Yiflow 已完成 Phase 1 的产品需求收敛，可以进入 Phase 2 技术设计与验证。
+- Yiflow 已完成 Phase 1 的产品需求收敛。
+- Yiflow 当前处于 Phase 2 技术设计与验证。
 - 后续所有正式工作必须有任务编号。
 - AI 不能越级修改产品边界、DSL、AST、Operation、Layout 或 Cursor 集成路线。
 - 关键决策必须写 ADR。
@@ -89,30 +97,26 @@
 - examples 必须覆盖多类真实业务流程，不把 KYC 作为唯一目标场景。
 - MVP 用户任务流已收敛为 5 条：首次出图、小改节点、改职责归属、局部整理、导出进文档。
 - 编辑器是结构化编辑器，不是 Figma / draw.io 式自由画布。
+- DSL v0.1 采用 YAML-first，当前 schema 必须兼容现有 3 个 examples。
 
 ## Open Questions
 
 - 是否需要额外加入 KYC 示例作为补充样例。
-- DSL Schema v0.1 是否采用 YAML 作为唯一 MVP 输入格式。
 - P0 技术栈是否采用 TypeScript 作为默认实现语言。
 - Layout P0 是否先做自研简单布局，还是直接引入 dagre / elkjs 进行验证。
-- DSL Schema v0.1 需要在不破坏现有 examples 的前提下明确 `diagram`、`lanes`、`nodes`、`edges`、`path_type`、`layout`、`metadata`。
+- AST Model v0.1 需要定义 Graph、Lane、Node、Edge、Layout、Operation、ValidationResult，并支持 DSL 转换和局部 patch。
 
 ## Risks
 
-- 若直接进入代码开发，会绕过 DSL Schema、AST Model 和技术设计。
+- 若直接进入代码开发，会绕过 AST Model、Operation Protocol、Layout Design 和 CLI Design。
 - 若 AI 未严格遵守 `docs/ai-rules/yiflow-ai-rules-v1.0.md`，可能导致范围膨胀和不可维护代码。
-- 当前 examples 尚未经过 schema 校验，因为 DSL Schema v0.1 尚未正式定义。
-- 若 DSL Schema 定义过宽，后续 Parser、Validator 和 Editor 实现成本会升高。
-- 若 DSL Schema 定义过窄，后续 Operation 和 Layout 可能缺少必要字段。
+- 当前 examples 尚未经过真实 parser / validator 校验，因为代码尚未实现。
+- 若 AST Model 定义过宽，后续实现成本会升高。
+- 若 AST Model 定义过窄，后续 Operation 和 Editor 可能缺少必要结构。
 
 ## Next Tasks
 
 按实施计划继续执行：
-
-### YF-P2-001：DSL Schema v0.1
-
-- `docs/tech-design/yiflow-dsl-schema-v0.1.md`
 
 ### YF-P2-002：AST Model v0.1
 
@@ -121,6 +125,10 @@
 ### YF-P2-003：Operation Protocol v0.1
 
 - `docs/tech-design/yiflow-operation-protocol-v0.1.md`
+
+### YF-P2-004：Layout Design v0.1
+
+- `docs/tech-design/yiflow-layout-design-v0.1.md`
 
 ## Agent Handoff Notes
 
@@ -136,9 +144,9 @@
 
 > 我已接手 Yiflow 项目。  
 > 当前阶段：Phase 2  
-> 当前任务：YF-P2-001 DSL Schema v0.1  
-> 已知约束：不直接写核心代码；不实现 Parser；不改产品边界；关键决策必须写 ADR；Schema 必须兼容现有 examples  
-> 下一步动作：创建 docs/tech-design/yiflow-dsl-schema-v0.1.md  
+> 当前任务：YF-P2-002 AST Model v0.1  
+> 已知约束：不直接写核心代码；不实现 Parser；不改产品边界；关键决策必须写 ADR；AST 必须支持 DSL 转换和局部 patch  
+> 下一步动作：创建 docs/tech-design/yiflow-ast-model-v0.1.md  
 > 不会做的事：不会跳过技术设计直接进入 P0 代码实现
 
 ## Do Not Do
@@ -150,4 +158,4 @@
 - 不要将 KYC 作为唯一示例场景。
 - 不要未经 ADR 修改 DSL / AST / Operation 核心结构。
 - 不要把编辑器设计成 Figma / draw.io 式自由画布。
-- 不要在 DSL Schema 未完成前实现 Parser。
+- 不要在 AST Model 未完成前实现 Parser。
