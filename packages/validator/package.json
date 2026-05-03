@@ -1,0 +1,11 @@
+{
+  "name": "@yiflow/validator",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "../../dist/packages/validator/src/index.js",
+  "types": "../../dist/packages/validator/src/index.d.ts",
+  "private": true,
+  "dependencies": {
+    "@yiflow/core": "0.1.0"
+  }
+}
