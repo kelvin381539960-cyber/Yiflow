@@ -1,0 +1,11 @@
+{
+  "name": "@yiflow/layout",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "../../dist/packages/layout/src/index.js",
+  "types": "../../dist/packages/layout/src/index.d.ts",
+  "private": true,
+  "dependencies": {
+    "@yiflow/core": "0.1.0"
+  }
+}
