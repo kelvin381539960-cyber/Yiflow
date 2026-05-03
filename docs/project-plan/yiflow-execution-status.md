@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P3-004：实现 Layout v0.1`
+`YF-P3-005：实现 SVG Renderer v0.1`
 
 ## Completed Tasks
 
@@ -47,13 +47,13 @@
 
 - 输出文件：`docs/prd/yiflow-mvp-scope-v1.0.md`
 - 状态：Completed
-- 说明：已明确 MVP 三阶段交付范围（P0 技术样机 / P1 可用原型 / P2 产品化），确认 MVP 必做功能集（SwimFlow DSL、Graph AST、Parser/Validator、基础布局、Markdown 预览、Editor 基础功能、CLI、SVG/PNG 导出），并明确排除项（自由画布、多人协作、完整 BPMN、AI 自然语言生成、draw.io 导入）。
+- 说明：已明确 MVP 三阶段交付范围，并明确排除项。
 
 ### YF-P1-002：输出用户任务流文档
 
 - 输出文件：`docs/ux/yiflow-user-flows-v1.0.md`
 - 状态：Completed
-- 说明：已覆盖首次出图、小改节点、改职责归属、局部整理、导出进文档 5 条 MVP 用户任务流；每条任务流均包含用户输入、系统动作、成功状态、失败状态和不做范围。
+- 说明：已覆盖首次出图、小改节点、改职责归属、局部整理、导出进文档 5 条 MVP 用户任务流。
 
 ### YF-P1-003：输出编辑器交互规格
 
@@ -65,7 +65,7 @@
 
 - 输出文件：`docs/tech-design/yiflow-dsl-schema-v0.1.md`
 - 状态：Completed
-- 说明：已定义 `diagram`、`lanes`、`nodes`、`edges`、`path_type`、`layout`、`metadata` 和基础校验规则；确认兼容现有 examples；明确 v0.1 不包含 BPMN 完整语义、自由画布坐标、AI prompt 历史和运行时执行状态。
+- 说明：已定义 `diagram`、`lanes`、`nodes`、`edges`、`path_type`、`layout`、`metadata` 和基础校验规则。
 
 ### YF-P2-002：AST Model v0.1
 
@@ -77,7 +77,7 @@
 
 - 输出文件：`docs/tech-design/yiflow-operation-protocol-v0.1.md`
 - 状态：Completed
-- 说明：已定义 Operation 顶层结构、OperationResult、AffectedScope，并覆盖 update_node_text、insert_node_after、insert_node_between、delete_node、move_node_to_lane、update_edge_label、update_edge_path_type、add_branch、local_relayout、lock_node、lock_main_path 等操作。
+- 说明：已定义 Operation 顶层结构、OperationResult、AffectedScope，并覆盖基础编辑操作。
 
 ### YF-P2-004：Layout Design v0.1
 
@@ -127,7 +127,7 @@
   - `packages/parser/src/index.ts`
   - `tests/parser.test.ts`
 - 状态：Completed
-- 说明：已实现 YAML → Graph AST 解析，支持读取 `.swimflow.yaml`、转换 diagram/lanes/nodes/edges/layout 到 AST，并在缺少必填字段或 enum 非法时返回结构化错误。已添加 parser 测试覆盖 3 个 examples 和错误场景。
+- 说明：已实现 YAML → Graph AST 解析，支持读取 `.swimflow.yaml`、转换 diagram/lanes/nodes/edges/layout 到 AST，并在缺少必填字段或 enum 非法时返回结构化错误。
 
 ### YF-P3-003：实现 Validator v0.1
 
@@ -136,7 +136,15 @@
   - `tests/smoke.test.ts`
   - `tests/validator.test.ts`
 - 状态：Completed
-- 说明：已实现 Graph AST 结构校验，覆盖 lane/node/edge id 唯一性、node.lane 引用、edge from/to 引用、decision 出边数量、start/end 边方向 warning。已添加 validator 测试覆盖 3 个 examples 和 duplicate/reference/decision 错误场景。
+- 说明：已实现 Graph AST 结构校验，覆盖 lane/node/edge id 唯一性、node.lane 引用、edge from/to 引用、decision 出边数量、start/end 边方向 warning。
+
+### YF-P3-004：实现 Layout v0.1
+
+- 输出文件：
+  - `packages/layout/src/index.ts`
+  - `tests/layout.test.ts`
+- 状态：Completed
+- 说明：已实现基础泳道布局和 rank 布局，支持按泳道纵向排列节点、按主路径/非 return 边进行横向 rank 分配、输出 nodePositions、laneBounds、edgeRoutes；return path 使用底部回跳通道。已添加 layout 测试覆盖主路径 x 轴递增、泳道 y 轴递增和 return edge bottom channel。
 
 ## Changed Files
 
@@ -177,12 +185,10 @@
 - `tests/smoke.test.ts`
 - `tests/parser.test.ts`
 - `tests/validator.test.ts`
+- `tests/layout.test.ts`
 
 ## Current Decisions
 
-- Yiflow 已完成 Phase 0 的核心治理体系建设。
-- Yiflow 已完成 Phase 1 的产品需求收敛。
-- Yiflow 已完成 Phase 2 的核心技术设计文档。
 - Yiflow 当前处于 Phase 3：P0 技术样机。
 - 后续所有正式工作必须有任务编号。
 - AI 不能越级修改产品边界、DSL、AST、Operation、Layout 或 Cursor 集成路线。
@@ -190,11 +196,10 @@
 - DSL v0.1 采用 YAML-first，当前 schema 必须兼容现有 3 个 examples。
 - Graph AST 是 Yiflow 内部结构真相，Renderer 不直接读取 DSL，Editor 不直接修改 SVG。
 - Operation 默认作用于 Graph AST，不直接改 SVG。
-- Layout v0.1 以主路径可读性为第一优先级。
-- CLI v0.1 以 validate / render 最小闭环为核心。
 - ADR-0001 已确认：P0 技术栈为 TypeScript；P0 Layout 采用自研简单布局；P0 Render 只支持 SVG。
 - Phase 3 工程结构采用 npm workspace 起步。
 - Parser v0.1 引入最小依赖 `yaml`。
+- Layout v0.1 使用自研简单布局：lane = y axis，rank = x axis，return path = bottom channel。
 
 ## Open Questions
 
@@ -206,18 +211,12 @@
 
 - Phase 3 必须继续小步提交，避免一次性生成完整系统。
 - 当前代码通过 GitHub 写入，但尚未在本地实际执行 `npm install`、`npm test` 或 CLI 命令验证。
-- Layout、renderer 仍为占位入口，不代表对应能力已实现。
-- Validator 当前只做结构校验，不负责布局可读性或 SVG 输出校验。
+- Renderer 仍为占位入口，不代表 SVG 输出能力已完成。
+- Layout v0.1 当前是最小可读布局，不追求复杂避让或美观优化。
 
 ## Next Tasks
 
 按实施计划继续执行：
-
-### YF-P3-004：实现 Layout v0.1
-
-- 能按泳道排列节点。
-- 能让主路径从左到右。
-- 能输出节点坐标。
 
 ### YF-P3-005：实现 SVG Renderer v0.1
 
@@ -229,6 +228,13 @@
 
 - `yiflow validate examples/approval-flow.swimflow.yaml`
 - `yiflow render examples/approval-flow.swimflow.yaml -o output.svg`
+
+### YF-P3-007：本地验证与修复
+
+- 运行 `npm install`。
+- 运行 `npm test`。
+- 运行 CLI validate/render。
+- 修复发现的问题。
 
 ## Agent Handoff Notes
 
@@ -244,10 +250,10 @@
 
 > 我已接手 Yiflow 项目。  
 > 当前阶段：Phase 3  
-> 当前任务：YF-P3-004 实现 Layout v0.1  
-> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；Layout 只做基础坐标计算，不实现 SVG Renderer 业务逻辑  
-> 下一步动作：实现 Layout v0.1，按泳道和主路径 rank 输出节点坐标  
-> 不会做的事：不会直接一次性实现 Renderer、CLI 全套系统
+> 当前任务：YF-P3-005 实现 SVG Renderer v0.1  
+> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；Renderer 只读取 Graph AST + LayoutResult，不直接读取 DSL  
+> 下一步动作：实现 SVG Renderer v0.1，显示泳道、节点、连线和 label  
+> 不会做的事：不会直接一次性实现 CLI 全套系统或 Editor
 
 ## Do Not Do
 
