@@ -2,11 +2,11 @@
 
 ## Current Phase
 
-`Phase 2：技术设计与验证`
+`Phase 3：P0 技术样机（待项目主控确认后开始）`
 
 ## Current Task
 
-`YF-P2-003：Operation Protocol v0.1`
+`YF-P3-001：初始化工程结构`
 
 ## Completed Tasks
 
@@ -73,6 +73,24 @@
 - 状态：Completed
 - 说明：已定义 Graph、Lane、Node、Edge、GraphIndexes、LayoutConfig、LayoutResult 关系、Operation 关系、ValidationResult、Diagnostic、DSL 到 AST 映射、AST 到 DSL 回写规则，并明确支持局部 patch。
 
+### YF-P2-003：Operation Protocol v0.1
+
+- 输出文件：`docs/tech-design/yiflow-operation-protocol-v0.1.md`
+- 状态：Completed
+- 说明：已定义 Operation 顶层结构、OperationResult、AffectedScope，并覆盖 update_node_text、insert_node_after、insert_node_between、delete_node、move_node_to_lane、update_edge_label、update_edge_path_type、add_branch、local_relayout、lock_node、lock_main_path 等操作。
+
+### YF-P2-004：Layout Design v0.1
+
+- 输出文件：`docs/tech-design/yiflow-layout-design-v0.1.md`
+- 状态：Completed
+- 说明：已定义主路径优先、异常路径弱化、回跳路径 bottom channel、局部重排、锁定对象避让、visual override 清理原则、LayoutResult 和 Operation 与 Layout 的关系。
+
+### YF-P2-005：CLI Design v0.1
+
+- 输出文件：`docs/tech-design/yiflow-cli-design-v0.1.md`
+- 状态：Completed
+- 说明：已定义 validate、render、inspect、apply-op、version、help 命令，明确 exit code、错误输出规范、文件写入规则和 P0 最小闭环。
+
 ## Changed Files
 
 - `README.md`
@@ -90,12 +108,15 @@
 - `docs/ux/yiflow-editor-interaction-spec-v1.0.md`
 - `docs/tech-design/yiflow-dsl-schema-v0.1.md`
 - `docs/tech-design/yiflow-ast-model-v0.1.md`
+- `docs/tech-design/yiflow-operation-protocol-v0.1.md`
+- `docs/tech-design/yiflow-layout-design-v0.1.md`
+- `docs/tech-design/yiflow-cli-design-v0.1.md`
 
 ## Current Decisions
 
 - Yiflow 已完成 Phase 0 的核心治理体系建设。
 - Yiflow 已完成 Phase 1 的产品需求收敛。
-- Yiflow 当前处于 Phase 2 技术设计与验证。
+- Yiflow 已完成 Phase 2 的核心技术设计文档。
 - 后续所有正式工作必须有任务编号。
 - AI 不能越级修改产品边界、DSL、AST、Operation、Layout 或 Cursor 集成路线。
 - 关键决策必须写 ADR。
@@ -106,37 +127,62 @@
 - 编辑器是结构化编辑器，不是 Figma / draw.io 式自由画布。
 - DSL v0.1 采用 YAML-first，当前 schema 必须兼容现有 3 个 examples。
 - Graph AST 是 Yiflow 内部结构真相，Renderer 不直接读取 DSL，Editor 不直接修改 SVG。
+- Operation 默认作用于 Graph AST，不直接改 SVG。
+- Layout v0.1 以主路径可读性为第一优先级。
+- CLI v0.1 以 validate / render 最小闭环为核心。
 
 ## Open Questions
 
 - 是否需要额外加入 KYC 示例作为补充样例。
 - P0 技术栈是否采用 TypeScript 作为默认实现语言。
 - Layout P0 是否先做自研简单布局，还是直接引入 dagre / elkjs 进行验证。
-- Operation Protocol v0.1 需要定义 insert_node_after、insert_node_between、delete_node、move_node_to_lane、add_branch、local_relayout、lock_main_path 等操作。
+- P0 是否只支持 SVG 输出，HTML Preview 延后到 P1。
+- 是否需要在进入 Phase 3 前创建 ADR-0001 固化技术栈与布局策略。
 
 ## Risks
 
-- 若直接进入代码开发，会绕过 Operation Protocol、Layout Design 和 CLI Design。
-- 若 AI 未严格遵守 `docs/ai-rules/yiflow-ai-rules-v1.0.md`，可能导致范围膨胀和不可维护代码。
+- 若直接进入代码开发但未确认技术栈，可能导致后续重构。
+- 若 Layout P0 选型过重，可能拖慢技术样机。
+- 若 Layout P0 选型过轻，可能无法验证异常路径和回跳路径。
 - 当前 examples 尚未经过真实 parser / validator 校验，因为代码尚未实现。
-- 若 Operation Protocol 定义过宽，Editor 和 AI 修改成本会升高。
-- 若 Operation Protocol 定义过窄，后续局部编辑能力会不足。
+- Phase 3 开始后必须小步提交，避免一次性生成完整系统。
 
 ## Next Tasks
 
 按实施计划继续执行：
 
-### YF-P2-003：Operation Protocol v0.1
+### YF-P3-001：初始化工程结构
 
-- `docs/tech-design/yiflow-operation-protocol-v0.1.md`
+建议输出：
 
-### YF-P2-004：Layout Design v0.1
+```text
+packages/core
+packages/parser
+packages/validator
+packages/layout
+packages/renderer
+packages/cli
+tests
+```
 
-- `docs/tech-design/yiflow-layout-design-v0.1.md`
+验收：
 
-### YF-P2-005：CLI Design v0.1
+- 能安装依赖。
+- 能运行空测试。
+- 能执行基础 CLI 入口。
 
-- `docs/tech-design/yiflow-cli-design-v0.1.md`
+### YF-P3-002：实现 Parser v0.1
+
+- 能读取 YAML。
+- 能转换为 AST。
+- 遇到缺字段能报错。
+
+### YF-P3-003：实现 Validator v0.1
+
+- 能校验节点唯一。
+- 能校验 edge 引用。
+- 能校验 lane 引用。
+- 能校验 decision 出边。
 
 ## Agent Handoff Notes
 
@@ -151,19 +197,18 @@
 接手后必须先输出：
 
 > 我已接手 Yiflow 项目。  
-> 当前阶段：Phase 2  
-> 当前任务：YF-P2-003 Operation Protocol v0.1  
-> 已知约束：不直接写核心代码；不实现 Editor；不改产品边界；关键决策必须写 ADR；Operation 默认作用于 Graph AST，不直接改 SVG  
-> 下一步动作：创建 docs/tech-design/yiflow-operation-protocol-v0.1.md  
-> 不会做的事：不会跳过技术设计直接进入 P0 代码实现
+> 当前阶段：Phase 3（待项目主控确认后开始）  
+> 当前任务：YF-P3-001 初始化工程结构  
+> 已知约束：小步提交；不一次性实现完整系统；不改变 DSL/AST/Operation 核心结构；关键变更必须写 ADR  
+> 下一步动作：确认技术栈与 P0 layout 策略后，初始化工程结构  
+> 不会做的事：不会直接一次性实现 Parser、Validator、Layout、Renderer、CLI 全套系统
 
 ## Do Not Do
 
-- 不要直接进入核心代码实现。
+- 不要一次性生成完整系统。
 - 不要创建复杂编辑器。
 - 不要实现 Cursor 插件。
 - 不要改变 Yiflow 的产品边界。
 - 不要将 KYC 作为唯一示例场景。
 - 不要未经 ADR 修改 DSL / AST / Operation 核心结构。
 - 不要把编辑器设计成 Figma / draw.io 式自由画布。
-- 不要在 Operation Protocol 未完成前实现 Editor。
