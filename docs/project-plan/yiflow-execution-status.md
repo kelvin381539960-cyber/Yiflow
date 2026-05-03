@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P3-001：初始化工程结构`
+`YF-P3-002：实现 Parser v0.1`
 
 ## Completed Tasks
 
@@ -97,6 +97,28 @@
 - 状态：Accepted
 - 说明：已确认 P0 采用 TypeScript、自研简单布局、SVG only 输出。
 
+### YF-P3-001：初始化工程结构
+
+- 输出文件：
+  - `package.json`
+  - `tsconfig.json`
+  - `packages/README.md`
+  - `packages/core/package.json`
+  - `packages/core/src/index.ts`
+  - `packages/parser/package.json`
+  - `packages/parser/src/index.ts`
+  - `packages/validator/package.json`
+  - `packages/validator/src/index.ts`
+  - `packages/layout/package.json`
+  - `packages/layout/src/index.ts`
+  - `packages/renderer/package.json`
+  - `packages/renderer/src/index.ts`
+  - `packages/cli/package.json`
+  - `packages/cli/src/index.ts`
+  - `tests/smoke.test.ts`
+- 状态：Completed
+- 说明：已建立 TypeScript + npm workspace 工程骨架，创建 core/parser/validator/layout/renderer/cli 六个包、基础 CLI 占位入口和 smoke test。当前仅为骨架，占位实现不代表 Parser/Validator/Layout/Renderer 已完成。
+
 ## Changed Files
 
 - `README.md`
@@ -118,13 +140,29 @@
 - `docs/tech-design/yiflow-operation-protocol-v0.1.md`
 - `docs/tech-design/yiflow-layout-design-v0.1.md`
 - `docs/tech-design/yiflow-cli-design-v0.1.md`
+- `package.json`
+- `tsconfig.json`
+- `packages/README.md`
+- `packages/core/package.json`
+- `packages/core/src/index.ts`
+- `packages/parser/package.json`
+- `packages/parser/src/index.ts`
+- `packages/validator/package.json`
+- `packages/validator/src/index.ts`
+- `packages/layout/package.json`
+- `packages/layout/src/index.ts`
+- `packages/renderer/package.json`
+- `packages/renderer/src/index.ts`
+- `packages/cli/package.json`
+- `packages/cli/src/index.ts`
+- `tests/smoke.test.ts`
 
 ## Current Decisions
 
 - Yiflow 已完成 Phase 0 的核心治理体系建设。
 - Yiflow 已完成 Phase 1 的产品需求收敛。
 - Yiflow 已完成 Phase 2 的核心技术设计文档。
-- Yiflow 当前进入 Phase 3：P0 技术样机。
+- Yiflow 当前处于 Phase 3：P0 技术样机。
 - 后续所有正式工作必须有任务编号。
 - AI 不能越级修改产品边界、DSL、AST、Operation、Layout 或 Cursor 集成路线。
 - 关键决策必须写 ADR。
@@ -136,43 +174,24 @@
 - Layout v0.1 以主路径可读性为第一优先级。
 - CLI v0.1 以 validate / render 最小闭环为核心。
 - ADR-0001 已确认：P0 技术栈为 TypeScript；P0 Layout 采用自研简单布局；P0 Render 只支持 SVG。
+- Phase 3 工程结构采用 npm workspace 起步。
 
 ## Open Questions
 
 - 是否需要额外加入 KYC 示例作为补充样例。
-- Phase 3 初始化工程结构时，包管理方式采用 npm workspace 还是单 package 起步。
-- P0 是否需要在首轮就加入 GitHub Actions，还是等 Parser / Validator 后再加入。
+- P0 是否需要在 Parser / Validator 完成后加入 GitHub Actions。
+- 是否需要在 YF-P3-002 中引入 YAML 解析依赖；如引入，应保持最小依赖。
 
 ## Risks
 
-- Phase 3 开始后必须小步提交，避免一次性生成完整系统。
-- 若工程结构过早复杂化，会增加维护成本。
-- 若 P0 layout 实现过度追求美观，会拖慢最小闭环。
-- 当前 examples 尚未经过真实 parser / validator 校验，因为代码尚未实现。
+- Phase 3 必须继续小步提交，避免一次性生成完整系统。
+- 当前工程骨架通过 GitHub 写入，但尚未在本地实际执行 `npm install`、`npm test` 或 CLI 命令验证。
+- 当前 parser、validator、layout、renderer 均为占位入口，不代表对应能力已实现。
+- 当前 examples 尚未经过真实 parser / validator 校验，因为 Parser v0.1 尚未实现。
 
 ## Next Tasks
 
 按实施计划继续执行：
-
-### YF-P3-001：初始化工程结构
-
-建议输出：
-
-```text
-packages/core
-packages/parser
-packages/validator
-packages/layout
-packages/renderer
-packages/cli
-tests
-```
-
-验收：
-
-- 能安装依赖。
-- 能运行空测试。
-- 能执行基础 CLI 入口。
 
 ### YF-P3-002：实现 Parser v0.1
 
@@ -186,6 +205,12 @@ tests
 - 能校验 edge 引用。
 - 能校验 lane 引用。
 - 能校验 decision 出边。
+
+### YF-P3-004：实现 Layout v0.1
+
+- 能按泳道排列节点。
+- 能让主路径从左到右。
+- 能输出节点坐标。
 
 ## Agent Handoff Notes
 
@@ -201,10 +226,10 @@ tests
 
 > 我已接手 Yiflow 项目。  
 > 当前阶段：Phase 3  
-> 当前任务：YF-P3-001 初始化工程结构  
-> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；不改变 DSL/AST/Operation 核心结构；关键变更必须写 ADR  
-> 下一步动作：初始化工程结构，建立可安装、可测试、可执行基础 CLI 入口  
-> 不会做的事：不会直接一次性实现 Parser、Validator、Layout、Renderer、CLI 全套系统
+> 当前任务：YF-P3-002 实现 Parser v0.1  
+> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；Parser 只做 YAML → AST；不实现 Validator/Layout/Renderer 业务逻辑  
+> 下一步动作：实现 Parser v0.1，使 examples 可读取并转换为 Graph AST  
+> 不会做的事：不会直接一次性实现 Validator、Layout、Renderer、CLI 全套系统
 
 ## Do Not Do
 
