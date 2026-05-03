@@ -1,0 +1,26 @@
+{
+  "name": "yiflow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-native structured workflow diagram toolkit.",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "cli": "tsx packages/cli/src/index.ts",
+    "validate": "tsx packages/cli/src/index.ts validate",
+    "render": "tsx packages/cli/src/index.ts render",
+    "inspect": "tsx packages/cli/src/index.ts inspect",
+    "apply-op": "tsx packages/cli/src/index.ts apply-op"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  },
+  "dependencies": {}
+}
