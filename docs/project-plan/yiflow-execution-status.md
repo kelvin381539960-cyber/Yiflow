@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P3-007：本地验证与修复（待本地执行）`
+`YF-P3-007：本地执行验证`
 
 ## Completed Tasks
 
@@ -172,6 +172,15 @@
 - 状态：Ready for local execution
 - 说明：已增加 `npm run verify:p0` 验证脚本、本地验证说明文档和生成物忽略规则。当前环境无法访问 GitHub / npm registry，尚未完成真实本地执行验证。
 
+### YF-P3-008：修复 Validator 空图合法问题
+
+- 输出文件：
+  - `packages/validator/src/index.ts`
+  - `tests/smoke.test.ts`
+  - `tests/validator.test.ts`
+- 状态：Completed
+- 说明：已修复严格 QA 提出的 P0 验收阻塞项。Validator 现在要求至少 1 个 lane、至少 1 个 node、至少 1 个 start node、至少 1 个 end node；空图不再合法。已补充空图、缺 lane、缺 node、缺 start、缺 end、duplicate lane、duplicate edge、edge from/to、start/end warning 等边界测试。
+
 ## Changed Files
 
 - `README.md`
@@ -233,6 +242,7 @@
 - Layout v0.1 使用自研简单布局：lane = y axis，rank = x axis，return path = bottom channel。
 - Renderer v0.1 输出 SVG only。
 - CLI v0.1 已接入 validate/render 最小闭环。
+- Validator v0.1 已修复空图合法问题。
 
 ## Open Questions
 
@@ -268,7 +278,7 @@ npm run cli -- inspect examples/approval-flow.swimflow.yaml
 npm run cli -- render examples/approval-flow.swimflow.yaml -o artifacts/approval-flow.svg
 ```
 
-### YF-P3-008：根据本地验证结果修复问题
+### YF-P3-009：根据本地验证结果修复问题
 
 仅在本地验证发现失败时执行。
 
