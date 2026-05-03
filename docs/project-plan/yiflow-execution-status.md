@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P1-002：输出用户任务流文档`
+`YF-P1-003：输出编辑器交互规格`
 
 ## Completed Tasks
 
@@ -49,6 +49,12 @@
 - 状态：Completed
 - 说明：已明确 MVP 三阶段交付范围（P0 技术样机 / P1 可用原型 / P2 产品化），确认 MVP 必做功能集（SwimFlow DSL、Graph AST、Parser/Validator、基础布局、Markdown 预览、Editor 基础功能、CLI、SVG/PNG 导出），并明确排除项（自由画布、多人协作、完整 BPMN、AI 自然语言生成、draw.io 导入）。
 
+### YF-P1-002：输出用户任务流文档
+
+- 输出文件：`docs/ux/yiflow-user-flows-v1.0.md`
+- 状态：Completed
+- 说明：已覆盖首次出图、小改节点、改职责归属、局部整理、导出进文档 5 条 MVP 用户任务流；每条任务流均包含用户输入、系统动作、成功状态、失败状态和不做范围。
+
 ## Changed Files
 
 - `README.md`
@@ -62,16 +68,18 @@
 - `examples/human-system-flow.swimflow.yaml`
 - `examples/exception-return-flow.swimflow.yaml`
 - `docs/prd/yiflow-mvp-scope-v1.0.md`
+- `docs/ux/yiflow-user-flows-v1.0.md`
 
 ## Current Decisions
 
-- Yiflow 已完成 Phase 0 的核心治理体系建设，可以进入 Phase 1 产品需求收敛。
+- Yiflow 已完成 Phase 0 的核心治理体系建设，当前处于 Phase 1 产品需求收敛。
 - 后续所有正式工作必须有任务编号。
 - AI 不能越级修改产品边界、DSL、AST、Operation、Layout 或 Cursor 集成路线。
 - 关键决策必须写 ADR。
 - 默认执行顺序遵循 `docs/project-plan/yiflow-implementation-plan-v1.0.md`。
 - 新 Agent 接手时必须先读实施计划、项目计划、PRD 和本执行状态文件。
 - examples 必须覆盖多类真实业务流程，不把 KYC 作为唯一目标场景。
+- MVP 用户任务流已收敛为 5 条：首次出图、小改节点、改职责归属、局部整理、导出进文档。
 
 ## Open Questions
 
@@ -79,6 +87,7 @@
 - DSL Schema v0.1 是否采用 YAML 作为唯一 MVP 输入格式。
 - P0 技术栈是否采用 TypeScript 作为默认实现语言。
 - Layout P0 是否先做自研简单布局，还是直接引入 dagre / elkjs 进行验证。
+- 编辑器交互规格需要继续明确节点菜单、边菜单、合法拖拽、局部整理、锁定、保存回写。
 
 这些问题当前不阻塞 Phase 1。
 
@@ -88,14 +97,11 @@
 - 若直接进入代码开发，会绕过 DSL Schema、AST Model 和技术设计。
 - 若 AI 未严格遵守 `docs/ai-rules/yiflow-ai-rules-v1.0.md`，可能导致范围膨胀和不可维护代码。
 - 当前 examples 尚未经过 schema 校验，因为 DSL Schema v0.1 尚未正式定义。
+- 若编辑器交互规格没有边界，Yiflow 可能滑向自由画布工具。
 
 ## Next Tasks
 
 按实施计划继续执行：
-
-### YF-P1-002：输出用户任务流文档
-
-- `docs/ux/yiflow-user-flows-v1.0.md`
 
 ### YF-P1-003：输出编辑器交互规格
 
@@ -113,11 +119,11 @@
 
 接手后必须先输出：
 
-> 我已接手 Yiflow 项目。
-> 当前阶段：Phase 1
-> 当前任务：YF-P1-002 输出用户任务流文档
-> 已知约束：不直接写核心代码；不改 DSL/AST/Operation 核心设计；关键决策必须写 ADR
-> 下一步动作：创建 docs/ux/yiflow-user-flows-v1.0.md
+> 我已接手 Yiflow 项目。  
+> 当前阶段：Phase 1  
+> 当前任务：YF-P1-003 输出编辑器交互规格  
+> 已知约束：不直接写核心代码；不改 DSL/AST/Operation 核心设计；关键决策必须写 ADR；不把编辑器做成自由画布  
+> 下一步动作：创建 docs/ux/yiflow-editor-interaction-spec-v1.0.md  
 > 不会做的事：不会跳过产品需求收敛直接进入 P0 代码实现
 
 ## Do Not Do
@@ -128,3 +134,4 @@
 - 不要改变 Yiflow 的产品边界。
 - 不要将 KYC 作为唯一示例场景。
 - 不要未经 ADR 修改 DSL / AST / Operation 核心结构。
+- 不要把编辑器设计成 Figma / draw.io 式自由画布。
