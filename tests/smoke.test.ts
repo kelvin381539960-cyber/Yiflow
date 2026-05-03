@@ -13,7 +13,7 @@ describe('Yiflow smoke test', () => {
     expect(graph.direction).toBe('LR');
   });
 
-  it('runs validation, placeholder layout, and placeholder rendering', () => {
+  it('runs validation, layout, and SVG rendering', () => {
     const graph = createEmptyGraph('smoke_graph');
     const validation = validateGraph(graph);
     const layout = layoutGraphPlaceholder(graph);
@@ -21,8 +21,7 @@ describe('Yiflow smoke test', () => {
 
     expect(validation.valid).toBe(true);
     expect(validation.errors).toEqual([]);
-    expect(layout.warnings.length).toBeGreaterThan(0);
     expect(svg).toContain('<svg');
-    expect(svg).toContain('Yiflow SVG placeholder');
+    expect(svg).toContain('Empty Graph');
   });
 });
