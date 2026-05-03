@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P3-005：实现 SVG Renderer v0.1`
+`YF-P3-006：接入 CLI validate/render 最小闭环`
 
 ## Completed Tasks
 
@@ -144,7 +144,16 @@
   - `packages/layout/src/index.ts`
   - `tests/layout.test.ts`
 - 状态：Completed
-- 说明：已实现基础泳道布局和 rank 布局，支持按泳道纵向排列节点、按主路径/非 return 边进行横向 rank 分配、输出 nodePositions、laneBounds、edgeRoutes；return path 使用底部回跳通道。已添加 layout 测试覆盖主路径 x 轴递增、泳道 y 轴递增和 return edge bottom channel。
+- 说明：已实现基础泳道布局和 rank 布局，支持按泳道纵向排列节点、按主路径/非 return 边进行横向 rank 分配、输出 nodePositions、laneBounds、edgeRoutes；return path 使用底部回跳通道。
+
+### YF-P3-005：实现 SVG Renderer v0.1
+
+- 输出文件：
+  - `packages/renderer/src/index.ts`
+  - `tests/renderer.test.ts`
+  - `tests/smoke.test.ts`
+- 状态：Completed
+- 说明：已实现 SVG Renderer，支持渲染泳道、节点、连线、箭头、edge label、graph title，并对 XML 特殊字符进行转义。Renderer 只读取 Graph AST + LayoutResult，不直接读取 DSL。
 
 ## Changed Files
 
@@ -186,6 +195,7 @@
 - `tests/parser.test.ts`
 - `tests/validator.test.ts`
 - `tests/layout.test.ts`
+- `tests/renderer.test.ts`
 
 ## Current Decisions
 
@@ -200,6 +210,7 @@
 - Phase 3 工程结构采用 npm workspace 起步。
 - Parser v0.1 引入最小依赖 `yaml`。
 - Layout v0.1 使用自研简单布局：lane = y axis，rank = x axis，return path = bottom channel。
+- Renderer v0.1 输出 SVG only。
 
 ## Open Questions
 
@@ -211,18 +222,12 @@
 
 - Phase 3 必须继续小步提交，避免一次性生成完整系统。
 - 当前代码通过 GitHub 写入，但尚未在本地实际执行 `npm install`、`npm test` 或 CLI 命令验证。
-- Renderer 仍为占位入口，不代表 SVG 输出能力已完成。
-- Layout v0.1 当前是最小可读布局，不追求复杂避让或美观优化。
+- Renderer v0.1 是最小 SVG 输出，不包含复杂视觉优化。
+- CLI 仍未接入真实 Parser / Validator / Layout / Renderer 链路。
 
 ## Next Tasks
 
 按实施计划继续执行：
-
-### YF-P3-005：实现 SVG Renderer v0.1
-
-- 能输出 SVG。
-- 能显示泳道、节点、连线。
-- 能在浏览器打开查看。
 
 ### YF-P3-006：接入 CLI validate/render 最小闭环
 
@@ -250,10 +255,10 @@
 
 > 我已接手 Yiflow 项目。  
 > 当前阶段：Phase 3  
-> 当前任务：YF-P3-005 实现 SVG Renderer v0.1  
-> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；不一次性实现完整系统；Renderer 只读取 Graph AST + LayoutResult，不直接读取 DSL  
-> 下一步动作：实现 SVG Renderer v0.1，显示泳道、节点、连线和 label  
-> 不会做的事：不会直接一次性实现 CLI 全套系统或 Editor
+> 当前任务：YF-P3-006 接入 CLI validate/render 最小闭环  
+> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；CLI 只接入 validate/render 最小闭环，不实现 Editor 或 AI 修改  
+> 下一步动作：接入 CLI validate/render，使 CLI 调用 Parser、Validator、Layout、Renderer 形成 P0 最小链路  
+> 不会做的事：不会实现复杂 CLI、watch mode、云端命令或 Editor
 
 ## Do Not Do
 
