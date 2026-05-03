@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P3-006：接入 CLI validate/render 最小闭环`
+`YF-P3-007：本地验证与修复`
 
 ## Completed Tasks
 
@@ -155,6 +155,14 @@
 - 状态：Completed
 - 说明：已实现 SVG Renderer，支持渲染泳道、节点、连线、箭头、edge label、graph title，并对 XML 特殊字符进行转义。Renderer 只读取 Graph AST + LayoutResult，不直接读取 DSL。
 
+### YF-P3-006：接入 CLI validate/render 最小闭环
+
+- 输出文件：
+  - `packages/cli/src/index.ts`
+  - `tests/cli.test.ts`
+- 状态：Completed
+- 说明：CLI 已接入真实 Parser、Validator、Layout、Renderer 链路；`validate` 可解析并校验 `.swimflow.yaml`，`render` 可解析、校验、布局并输出 SVG，`inspect` 可输出图结构摘要。`apply-op` 仍为占位，未进入本任务范围。
+
 ## Changed Files
 
 - `README.md`
@@ -196,6 +204,7 @@
 - `tests/validator.test.ts`
 - `tests/layout.test.ts`
 - `tests/renderer.test.ts`
+- `tests/cli.test.ts`
 
 ## Current Decisions
 
@@ -211,34 +220,31 @@
 - Parser v0.1 引入最小依赖 `yaml`。
 - Layout v0.1 使用自研简单布局：lane = y axis，rank = x axis，return path = bottom channel。
 - Renderer v0.1 输出 SVG only。
+- CLI v0.1 已接入 validate/render 最小闭环。
 
 ## Open Questions
 
 - 是否需要额外加入 KYC 示例作为补充样例。
-- P0 是否需要在 Parser / Validator 完成后加入 GitHub Actions。
-- CLI 是否在 Layout / Renderer 完成后统一接入真实 validate/render 流程。
+- P0 是否需要在本地验证通过后加入 GitHub Actions。
+- 是否需要将 `apply-op` 放入后续 Phase 3 任务，还是延后到 P1 Editor 相关阶段。
 
 ## Risks
 
 - Phase 3 必须继续小步提交，避免一次性生成完整系统。
 - 当前代码通过 GitHub 写入，但尚未在本地实际执行 `npm install`、`npm test` 或 CLI 命令验证。
+- CLI 已接入真实链路，但仍需本地验证安装、测试和实际 SVG 文件输出。
 - Renderer v0.1 是最小 SVG 输出，不包含复杂视觉优化。
-- CLI 仍未接入真实 Parser / Validator / Layout / Renderer 链路。
 
 ## Next Tasks
 
 按实施计划继续执行：
 
-### YF-P3-006：接入 CLI validate/render 最小闭环
-
-- `yiflow validate examples/approval-flow.swimflow.yaml`
-- `yiflow render examples/approval-flow.swimflow.yaml -o output.svg`
-
 ### YF-P3-007：本地验证与修复
 
 - 运行 `npm install`。
 - 运行 `npm test`。
-- 运行 CLI validate/render。
+- 运行 `npm run cli -- validate examples/approval-flow.swimflow.yaml`。
+- 运行 `npm run cli -- render examples/approval-flow.swimflow.yaml -o output.svg`。
 - 修复发现的问题。
 
 ## Agent Handoff Notes
@@ -255,9 +261,9 @@
 
 > 我已接手 Yiflow 项目。  
 > 当前阶段：Phase 3  
-> 当前任务：YF-P3-006 接入 CLI validate/render 最小闭环  
-> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；CLI 只接入 validate/render 最小闭环，不实现 Editor 或 AI 修改  
-> 下一步动作：接入 CLI validate/render，使 CLI 调用 Parser、Validator、Layout、Renderer 形成 P0 最小链路  
+> 当前任务：YF-P3-007 本地验证与修复  
+> 已知约束：TypeScript；自研简单布局；SVG only；小步提交；只修复验证发现的问题，不扩展新功能  
+> 下一步动作：运行 npm install、npm test、CLI validate/render，并修复发现的问题  
 > 不会做的事：不会实现复杂 CLI、watch mode、云端命令或 Editor
 
 ## Do Not Do
