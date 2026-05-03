@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P2-002：AST Model v0.1`
+`YF-P2-003：Operation Protocol v0.1`
 
 ## Completed Tasks
 
@@ -67,6 +67,12 @@
 - 状态：Completed
 - 说明：已定义 `diagram`、`lanes`、`nodes`、`edges`、`path_type`、`layout`、`metadata` 和基础校验规则；确认兼容现有 examples；明确 v0.1 不包含 BPMN 完整语义、自由画布坐标、AI prompt 历史和运行时执行状态。
 
+### YF-P2-002：AST Model v0.1
+
+- 输出文件：`docs/tech-design/yiflow-ast-model-v0.1.md`
+- 状态：Completed
+- 说明：已定义 Graph、Lane、Node、Edge、GraphIndexes、LayoutConfig、LayoutResult 关系、Operation 关系、ValidationResult、Diagnostic、DSL 到 AST 映射、AST 到 DSL 回写规则，并明确支持局部 patch。
+
 ## Changed Files
 
 - `README.md`
@@ -83,6 +89,7 @@
 - `docs/ux/yiflow-user-flows-v1.0.md`
 - `docs/ux/yiflow-editor-interaction-spec-v1.0.md`
 - `docs/tech-design/yiflow-dsl-schema-v0.1.md`
+- `docs/tech-design/yiflow-ast-model-v0.1.md`
 
 ## Current Decisions
 
@@ -98,29 +105,26 @@
 - MVP 用户任务流已收敛为 5 条：首次出图、小改节点、改职责归属、局部整理、导出进文档。
 - 编辑器是结构化编辑器，不是 Figma / draw.io 式自由画布。
 - DSL v0.1 采用 YAML-first，当前 schema 必须兼容现有 3 个 examples。
+- Graph AST 是 Yiflow 内部结构真相，Renderer 不直接读取 DSL，Editor 不直接修改 SVG。
 
 ## Open Questions
 
 - 是否需要额外加入 KYC 示例作为补充样例。
 - P0 技术栈是否采用 TypeScript 作为默认实现语言。
 - Layout P0 是否先做自研简单布局，还是直接引入 dagre / elkjs 进行验证。
-- AST Model v0.1 需要定义 Graph、Lane、Node、Edge、Layout、Operation、ValidationResult，并支持 DSL 转换和局部 patch。
+- Operation Protocol v0.1 需要定义 insert_node_after、insert_node_between、delete_node、move_node_to_lane、add_branch、local_relayout、lock_main_path 等操作。
 
 ## Risks
 
-- 若直接进入代码开发，会绕过 AST Model、Operation Protocol、Layout Design 和 CLI Design。
+- 若直接进入代码开发，会绕过 Operation Protocol、Layout Design 和 CLI Design。
 - 若 AI 未严格遵守 `docs/ai-rules/yiflow-ai-rules-v1.0.md`，可能导致范围膨胀和不可维护代码。
 - 当前 examples 尚未经过真实 parser / validator 校验，因为代码尚未实现。
-- 若 AST Model 定义过宽，后续实现成本会升高。
-- 若 AST Model 定义过窄，后续 Operation 和 Editor 可能缺少必要结构。
+- 若 Operation Protocol 定义过宽，Editor 和 AI 修改成本会升高。
+- 若 Operation Protocol 定义过窄，后续局部编辑能力会不足。
 
 ## Next Tasks
 
 按实施计划继续执行：
-
-### YF-P2-002：AST Model v0.1
-
-- `docs/tech-design/yiflow-ast-model-v0.1.md`
 
 ### YF-P2-003：Operation Protocol v0.1
 
@@ -129,6 +133,10 @@
 ### YF-P2-004：Layout Design v0.1
 
 - `docs/tech-design/yiflow-layout-design-v0.1.md`
+
+### YF-P2-005：CLI Design v0.1
+
+- `docs/tech-design/yiflow-cli-design-v0.1.md`
 
 ## Agent Handoff Notes
 
@@ -144,9 +152,9 @@
 
 > 我已接手 Yiflow 项目。  
 > 当前阶段：Phase 2  
-> 当前任务：YF-P2-002 AST Model v0.1  
-> 已知约束：不直接写核心代码；不实现 Parser；不改产品边界；关键决策必须写 ADR；AST 必须支持 DSL 转换和局部 patch  
-> 下一步动作：创建 docs/tech-design/yiflow-ast-model-v0.1.md  
+> 当前任务：YF-P2-003 Operation Protocol v0.1  
+> 已知约束：不直接写核心代码；不实现 Editor；不改产品边界；关键决策必须写 ADR；Operation 默认作用于 Graph AST，不直接改 SVG  
+> 下一步动作：创建 docs/tech-design/yiflow-operation-protocol-v0.1.md  
 > 不会做的事：不会跳过技术设计直接进入 P0 代码实现
 
 ## Do Not Do
@@ -158,4 +166,4 @@
 - 不要将 KYC 作为唯一示例场景。
 - 不要未经 ADR 修改 DSL / AST / Operation 核心结构。
 - 不要把编辑器设计成 Figma / draw.io 式自由画布。
-- 不要在 AST Model 未完成前实现 Parser。
+- 不要在 Operation Protocol 未完成前实现 Editor。
