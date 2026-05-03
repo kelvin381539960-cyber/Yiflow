@@ -1,0 +1,12 @@
+{
+  "name": "@yiflow/renderer",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "../../dist/packages/renderer/src/index.js",
+  "types": "../../dist/packages/renderer/src/index.d.ts",
+  "private": true,
+  "dependencies": {
+    "@yiflow/core": "0.1.0",
+    "@yiflow/layout": "0.1.0"
+  }
+}
