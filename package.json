@@ -14,7 +14,8 @@
     "validate": "tsx packages/cli/src/index.ts validate",
     "render": "tsx packages/cli/src/index.ts render",
     "inspect": "tsx packages/cli/src/index.ts inspect",
-    "apply-op": "tsx packages/cli/src/index.ts apply-op"
+    "apply-op": "tsx packages/cli/src/index.ts apply-op",
+    "verify:p0": "bash scripts/verify-p0.sh"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
