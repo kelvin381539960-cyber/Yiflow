@@ -6,7 +6,7 @@
 
 ## Current Task
 
-`YF-P3-007：本地验证与修复`
+`YF-P3-007：本地验证与修复（待本地执行）`
 
 ## Completed Tasks
 
@@ -112,7 +112,6 @@
   - `packages/layout/package.json`
   - `packages/layout/src/index.ts`
   - `packages/renderer/package.json`
-  - `packages/renderer/src/index.ts`
   - `packages/cli/package.json`
   - `packages/cli/src/index.ts`
   - `tests/smoke.test.ts`
@@ -163,6 +162,16 @@
 - 状态：Completed
 - 说明：CLI 已接入真实 Parser、Validator、Layout、Renderer 链路；`validate` 可解析并校验 `.swimflow.yaml`，`render` 可解析、校验、布局并输出 SVG，`inspect` 可输出图结构摘要。`apply-op` 仍为占位，未进入本任务范围。
 
+### YF-P3-007：本地验证准备
+
+- 输出文件：
+  - `package.json`
+  - `scripts/verify-p0.sh`
+  - `docs/project-plan/yiflow-p0-local-verification.md`
+  - `.gitignore`
+- 状态：Ready for local execution
+- 说明：已增加 `npm run verify:p0` 验证脚本、本地验证说明文档和生成物忽略规则。当前环境无法访问 GitHub / npm registry，尚未完成真实本地执行验证。
+
 ## Changed Files
 
 - `README.md`
@@ -173,6 +182,7 @@
 - `docs/adr/adr-template.md`
 - `docs/adr/adr-0001-p0-tech-stack-and-layout-strategy.md`
 - `docs/project-plan/yiflow-execution-status.md`
+- `docs/project-plan/yiflow-p0-local-verification.md`
 - `examples/approval-flow.swimflow.yaml`
 - `examples/human-system-flow.swimflow.yaml`
 - `examples/exception-return-flow.swimflow.yaml`
@@ -186,6 +196,8 @@
 - `docs/tech-design/yiflow-cli-design-v0.1.md`
 - `package.json`
 - `tsconfig.json`
+- `.gitignore`
+- `scripts/verify-p0.sh`
 - `packages/README.md`
 - `packages/core/package.json`
 - `packages/core/src/index.ts`
@@ -230,22 +242,35 @@
 
 ## Risks
 
-- Phase 3 必须继续小步提交，避免一次性生成完整系统。
-- 当前代码通过 GitHub 写入，但尚未在本地实际执行 `npm install`、`npm test` 或 CLI 命令验证。
-- CLI 已接入真实链路，但仍需本地验证安装、测试和实际 SVG 文件输出。
+- 当前环境无法访问 GitHub / npm registry，未能真实执行 `npm install`、`npm test` 或 CLI 命令。
+- CLI 已接入真实链路，但仍需在本地 Node.js 环境验证安装、测试和实际 SVG 文件输出。
 - Renderer v0.1 是最小 SVG 输出，不包含复杂视觉优化。
+- `scripts/verify-p0.sh` 需要在类 Unix shell 环境执行；Windows 可使用 Git Bash、WSL 或手动执行文档中的单步命令。
 
 ## Next Tasks
 
-按实施计划继续执行：
+### YF-P3-007：本地执行验证
 
-### YF-P3-007：本地验证与修复
+在本地仓库执行：
 
-- 运行 `npm install`。
-- 运行 `npm test`。
-- 运行 `npm run cli -- validate examples/approval-flow.swimflow.yaml`。
-- 运行 `npm run cli -- render examples/approval-flow.swimflow.yaml -o output.svg`。
-- 修复发现的问题。
+```bash
+npm install
+npm run verify:p0
+```
+
+或逐步执行：
+
+```bash
+npm run build
+npm test
+npm run cli -- validate examples/approval-flow.swimflow.yaml
+npm run cli -- inspect examples/approval-flow.swimflow.yaml
+npm run cli -- render examples/approval-flow.swimflow.yaml -o artifacts/approval-flow.svg
+```
+
+### YF-P3-008：根据本地验证结果修复问题
+
+仅在本地验证发现失败时执行。
 
 ## Agent Handoff Notes
 
@@ -255,15 +280,16 @@
 2. `docs/project-plan/yiflow-project-plan-v1.0.md`
 3. `docs/prd/yiflow-prd-v1.3.md`
 4. `docs/project-plan/yiflow-execution-status.md`
-5. 当前任务相关文档
+5. `docs/project-plan/yiflow-p0-local-verification.md`
+6. 当前任务相关文档
 
 接手后必须先输出：
 
 > 我已接手 Yiflow 项目。  
 > 当前阶段：Phase 3  
-> 当前任务：YF-P3-007 本地验证与修复  
+> 当前任务：YF-P3-007 本地执行验证  
 > 已知约束：TypeScript；自研简单布局；SVG only；小步提交；只修复验证发现的问题，不扩展新功能  
-> 下一步动作：运行 npm install、npm test、CLI validate/render，并修复发现的问题  
+> 下一步动作：运行 npm install、npm run verify:p0，并记录结果  
 > 不会做的事：不会实现复杂 CLI、watch mode、云端命令或 Editor
 
 ## Do Not Do
